@@ -1,13 +1,35 @@
+import json
+
+
+
 # Explaing what tdee is and asking for a name
 
-print('Hello stranger, this script helps you to calculate your daily TDEE.\n' 
-    'TDEE stands for Total Daily Energy Expenditure, which is the total number of calories your body burns in a day during rest and physical activity.\n'
-    'Before we start asking you a few questions to calculate your TDEE, we need to know your Name!')
 bmr_explain = 'BMR is the calories your body burns if he would only lay down the whole day! So the minimum you need to survive.'
-user_name = input('Please enter a name.\n>')
-user_name = user_name.strip().title()
-print(f"Let's get started {user_name}!")
+tdee_explanaiton = ('Hello stranger, this script helps you to calculate your daily TDEE.\n' 
+                    'TDEE stands for Total Daily Energy Expenditure, which is the total number of calories your body burns in a day during rest and physical activity.\n'
+                    'Before we start asking you a few questions to calculate your TDEE, we need to know your Name!')
 
+# Helper function for username
+
+def user_namef():
+    user_name = input('Please enter a name.\n>')
+    user_name = user_name.strip().title()
+    return user_name
+
+
+# Helper function to load user data
+
+def load_user_data():
+    try:
+        with open("user_data.json", "rt") as file:
+            user_data = json.load(file)
+            if user_data != None:
+                return user_data
+            else:
+                return None
+    except FileNotFoundError:
+        return None
+        
 
 # Helper function for user informations like weight etc...
 
@@ -90,7 +112,8 @@ def activity_level():
                                    2: 1.375, 
                                    3: 1.55, 
                                    4: 1.725, 
-                                   5: 1.9}  
+                                   5: 1.9
+                                   }  
                 user_activity_level = activity_factor[user_activity_level]
                 break
             else:
@@ -99,20 +122,75 @@ def activity_level():
         except ValueError:
             print('Please enter only a number between 1-5')
             continue
-    return user_activity_level
-
+    return user_activity_level          
+       
 
 # Main function to calculate TDEE and asking for user gender
 
-def tdee_calculator(name):
-    user_bmr_info = user_genderf()
+def run_tdee_script(): 
 
-    # After bmr calculation, the tdee(main part) will executet after asking for his activity levels!
+    # Checking whether user has entered data before or not, if he hasnt the script will be executed
+
+    # user_data = load_user_data()
+    # if user_data == None:       
+    #     user_bmr_info = user_genderf()
+
+    #     # After bmr calculation, the tdee(main part) will executet after asking for his activity levels!
+        
+    #     user_activity_info = activity_level()
+    #     user_tdee_info = int(user_bmr_info * user_activity_info)
+    #     print(f"Your TDEE is {user_tdee_info}kcal!\nThank you for choosing us {name}!")
+    #     user_data = {
+    #         "user_name": name,
+    #         "user_bmr_info": user_bmr_info,
+    #         "user_activity_info": user_activity_info,
+    #         "user_tdee_info": user_tdee_info
+    #         }
+    #     return user_data
+
+    # If user does have used the script before, his values will be loaded if he wants to. 
+
+    user_data = load_user_data()
+    if user_data is None:
+         user_name = user_namef()
+         user_bmr_info = user_genderf()
+                
+        # After bmr calculation, the tdee(main part) will executet after asking for his activity levels!
+        
+         user_activity_info = activity_level()
+         user_tdee_info = int(user_bmr_info * user_activity_info)
+         print(f"Your TDEE is {user_tdee_info}kcal!\nThank you for choosing us {user_name}!")
+         user_data = {
+            "user_name": user_name,
+            "user_bmr_info": user_bmr_info,
+            "user_activity_info": user_activity_info,
+            "user_tdee_info": user_tdee_info
+            }
+         with open("user_data.json", "wt") as file:
+            json.dump(user_data, file)
+         return user_data, user_name
+    elif user_data != None:
+        print(f'Welcome back {user_data["user_name"]}!\n'
+            'Your data has been saved from last time, if you wanna know what your values are,\n' 
+            'please enter yes, if not please enter no.')    
+        while True:
+            user_ask_for_values = input('>')
+            if user_ask_for_values not in ['yes', 'no']:
+                print('Please enter either yes or no.')
+                continue
+            break
+        if user_ask_for_values in ['yes', "y"]:
+            print(f'Your stats:\nBMR: {user_data["user_bmr_info"]}kcal\n'
+                f'Activity Info: {user_data["user_activity_info"]}\n'
+                f'TDEE: {user_data["user_tdee_info"]}kcal')
+        elif user_ask_for_values in ['no', 'n']:
+            print('Alright, if you want you can log your calories now!')
+            print('IMPORTANT: We are currently working on this part :) It will be available soon!')
+            #So now the next step would be to work on a calorie tracker, a helper function to track the user's calories.
+
     
-    user_activity_info = activity_level()
-    user_tdee_info = int(user_bmr_info * user_activity_info)
-    print(f"Your TDEE is {user_tdee_info}kcal!\nThank you for choosing us!")
+run_tdee_script()
 
 
-tdee_calculator(user_name)
+
          
