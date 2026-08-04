@@ -128,28 +128,6 @@ def activity_level():
 # Main function to calculate TDEE and asking for user gender
 
 def run_tdee_script(): 
-
-    # Checking whether user has entered data before or not, if he hasnt the script will be executed
-
-    # user_data = load_user_data()
-    # if user_data == None:       
-    #     user_bmr_info = user_genderf()
-
-    #     # After bmr calculation, the tdee(main part) will executet after asking for his activity levels!
-        
-    #     user_activity_info = activity_level()
-    #     user_tdee_info = int(user_bmr_info * user_activity_info)
-    #     print(f"Your TDEE is {user_tdee_info}kcal!\nThank you for choosing us {name}!")
-    #     user_data = {
-    #         "user_name": name,
-    #         "user_bmr_info": user_bmr_info,
-    #         "user_activity_info": user_activity_info,
-    #         "user_tdee_info": user_tdee_info
-    #         }
-    #     return user_data
-
-    # If user does have used the script before, his values will be loaded if he wants to. 
-
     user_data = load_user_data()
     if user_data is None:
          user_name = user_namef()
