@@ -22,4 +22,4 @@ This project provides a command-line interface (CLI) to help users estimate thei
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git](https://github.com/lilkalimu-glitch/tdee-calculator)
+   git clone [https://github.com/lilkalimu-glitch/tdee-calculator]
